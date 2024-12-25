@@ -1,0 +1,20 @@
+Package: bs-manager
+Version: 1.5.0~alpha.6
+Architecture: amd64
+Maintainer: Zagrios <admin@bsmanager.io>
+Installed-Size: 307636
+Depends: libgtk-3-0, libnotify4, libnss3, libxss1, libxtst6, xdg-utils, libatspi2.0-0, libuuid1, libsecret-1-0
+Recommends: libappindicator3-1
+Filename: ./bs-manager_1.5.0-alpha.6_amd64.deb
+Size: 87085976
+MD5sum: 7013d8f460948d39a632086e4e1fbcbc
+SHA1: af34f6f0d072b2d453092239723bc7aa9fb913e5
+SHA256: 061fdb19758c2f7b5aee03d159223af139ccf04ecacb2949f8c96b4ca651269b
+Section: default
+Priority: optional
+Homepage: https://github.com/Zagrios/bs-manager#readme
+Description:
+  BSManager
+License: MIT
+Vendor: Zagrios <admin@bsmanager.io>
+
