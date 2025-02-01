@@ -1,36 +1,36 @@
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA256
 
-Date: Wed, 25 Dec 2024 07:50:37 +0000
+Date: Sat, 01 Feb 2025 00:40:44 +0000
 MD5Sum:
- b3cc2ede80e2f63be1a810fdc9747c8a              668 Packages
- 027eddef66f7c606940b0f598940c76c              466 Packages.gz
- f61dd15fc3aec6d1bc88d2e5128b91ea               38 Release
+ 72fb03436b9770b3dbaf488fc5469d91              652 Packages
+ fe62e5c27c83deab25bac77ed0b2da03              457 Packages.gz
+ a24e919dcb7562545646f0515297e0bc               38 Release
 SHA1:
- d7144982b675d0a65f1979b4dd606ab259ee4f61              668 Packages
- c448e96e8230e985105c2a59d18295452b915da1              466 Packages.gz
- ffcc63424002811334cbbc46b5807dc21472f426               38 Release
+ 2895a1872bee139cfb9e60eada9ace23838c3009              652 Packages
+ b82f47c5d1a89a554606debc0bc34ddfa6bcefaa              457 Packages.gz
+ 9882ce8ed669a5af64c980c3f622db25c47a2d8b               38 Release
 SHA256:
- fe2dc6b26a225f2e5aea662d8ca8ebd1e6bbfc1a61e5ae770143d7e53824d451              668 Packages
- 403f3e46debe5b38950160ca46ae593e05657ebd908f9b39ba8f65eb01002f23              466 Packages.gz
- 6d86c5975d78c55ff07ae7dc12a406671867bc0ecf4eb3b56d1139129296cd79               38 Release
+ 9f7901c49ec606396667ff3f6a9c202e37dd92673746adb8486f9cfa1e535697              652 Packages
+ 705650588ff6b4ade2384dfc9549bd7980bbef5ca6e721cd15ce74a6ce0ebf27              457 Packages.gz
+ 0af693f501382481d22a87abab46b8d65e624cce1c5862edced35f8172a5cb83               38 Release
 SHA512:
- 5d7371fdd32b2ef8110de79ab698a3cf33886d6b4cf82e322874ade7df09f16dff69c7a1b6436172a55f97e449c080ca1536a72f180109fa88274940cbbd61ff              668 Packages
- cd6d694544175c9c6085b3169cda56293b8c2445f02b0cf9aeff8da23ee3087b20309e9f5468825bd847b5070c3340f30f59da324b2fe1b0ac8b37d6e8063deb              466 Packages.gz
- 28e7de5fde092a9f6f5082005843b34c69dd4c9eb3b45bd02d23191fe51ac1a531b50260065b3b4960c85165dba81378dcbedb16b58928977cced2773770b33a               38 Release
+ c532e3272e95fc9190001f9f1c0b7ef7eaa61764d7c56e9a3adb7572b16eeafe6ff2d3a8846b9c566198e88bdd0ea423fd70d666b7020bc5fe6e68bc35061f72              652 Packages
+ e964fa55fb279558a3a0d915827dd84f0c91bce13e0461557cdbc005d8b67db3909f7c14dfcc704e233841cc7127a66c5da398288b1ec9529d772a11f8c56ac1              457 Packages.gz
+ 7b372010de6905463c9fbe6d767d2d72b17f8ee331beb1be00412b43427460f63e40f285c72008c2544b36fa96a510745266a595861ea20cda46f50e9f837307               38 Release
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCAAdFiEEgEsnzmGErp8UcP2gsoDnLSIHUfEFAmdruU0ACgkQsoDnLSIH
-UfEhrg//VwoDw+rnPv4/ZAVheEa1OzCL+wT+E8VXyH5CUbKnpokZaKqkMwvrNFIo
-3bfDhWe5ruvvqLCizhYtwU2zjRyNV+b0Bem6XZzHP6FHjKRs9FhOC2zjzcm8+o0f
-K7FKGMYk8ISYGGWucpPajLBAyaIWeBeS1d9vRU4S0iXPrXZ7AN3EOurxMOUDYBEF
-3nJk+EI8CKwfp+7iRP4kfHlv3ffr8Le0/67IdpLE2SpfmOfxzfptTKGOOsk1BaPT
-KJFI9d/1b9gu0desNrn9PfEv7v8XednJm5tda9GK6Gytit6430QrAQ6C4pamngEZ
-AOvsXxQ86NmOwOebhb5chK1ybiFj70npExBWHRAIGHzbX3SuME8DhjdhNIE3FPMQ
-Ugw1eoHbj+MO4ikeKIv+2Q6ug7MVkEk7gGbO/bqba2gYWRYEd5lAFHM2Xw7IBlYs
-dc5EvzyfiAjjok2WYo1006AymciDHx+pSmnsGGxSL55sbk4cAVA9qdawVluc/3ol
-aQ5Hg+2re0xnAWwlBiMLpMM0KeU31kZZhi1T1dZVb4nsW0y1tRULwvIxfMSGOU5q
-p0EPrSaBwnbSHmXov3c1Lfu8x8ylDgl3uSuEVlfEB08E0/HyfmBN9YvRi8d0I2RB
-z5qcgTp1UDCUuSnCA8sqvzNslzMJlkjZcblz/KlEg5TKPqnwl3I=
-=pKg6
+iQIzBAEBCAAdFiEEgEsnzmGErp8UcP2gsoDnLSIHUfEFAmedbYwACgkQsoDnLSIH
+UfFD/w/+KANGDHIEki3L0JvZzboXljfxfrU4ueRfMq8cJOTH6vna7gs95BZkx7Tg
+hgRLz4YBRPtuXTKjJ0Oed+d9LDxss+Ix0ujLt6d+bf1Dzyi04cPQGYZeUDiUmEO3
+qgZl2dPgmInCvTwfk4eXzt7encMG9E9sZmkN/oawND6U9qC0R8DeD+WzabffmLA/
+Hk6/GCv+3tbVEaAR8OJjw+dWO1P+FPrvQi5RkOGsc1jSAPbDF9hgn+XQKHjBodMC
+ShWXuJ/3TY1j85c2a3MVfs1mfdxUvKturIYZxyi7nfpLTHrJfBWHvo3mVv/eNB0I
+Up4i354D8XH5jcoj0yWk65YMOzpVtz89/CORxiG3vbqwP6r0kA5ZTqksqQLuUcyX
+PEpGsY+sVFq+fFbIjGLyBGtoi91oaZiHfhREgDCclM2m0UrEZFnRmXWMAkhEIJqR
+XEa6gOzTj6cE6F/HrZh4DuSXF2Qj6gKjCd7Eo0dqXU9jRhsSinZ9X+2V7JpzizrN
+yS8cRFo6AeKUF7cMcIH0V3PrCKPCvXNXewPCVAMttapfI5/nM5Ps/0KtvTRyDF3B
+uPWWlPJfNIi6LUPS4tvlCWkbVAHoVmE26KM9U00+Bl6H0Q3Q8WvRCkZznEUENAqI
+yTBXloZcfVl0/DLj+xOzPQ4P6LyyJJq32/T/7AlqkMCc0K3Oklg=
+=DRws
 -----END PGP SIGNATURE-----
