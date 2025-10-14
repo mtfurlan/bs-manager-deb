@@ -1,0 +1,5 @@
+Architectures: amd64
+Suites: latest/
+Types: deb
+Uris: https://github.com/mtfurlan/bs-manager-deb/releases/download/
+Signed-By: /usr/share/keyrings/bs-manager.gpg
