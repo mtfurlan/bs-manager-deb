@@ -10,7 +10,7 @@ h () {
     [ $# == 0 ] || echo "$*"
 
   cat <<EOF
-Usage: $(basename "${BASH_SOURCE[0]}") [OPTION]...
+Usage: $(basename "${BASH_SOURCE[0]}") [OPTION]... SIGNING-PRIVATE-KEY.gpg
   do a new release from $debList and push to latest github release
 Available options:
   -h, --help       display this help and exit
@@ -46,8 +46,8 @@ while true ; do
         *) die "issue parsing args, unexpected argument '$0'!" ;;
     esac
 done
-keyname=${1:-}
-if [[ -z "$keyname" ]]; then
+privateKey=${1:-}
+if [[ ! -f "$privateKey" ]]; then
     h "need to pass in gpg signing key name"
 fi
 
@@ -62,11 +62,26 @@ cd release
 dpkg-scanpackages --multiversion . > Packages
 gzip -k -f Packages
 
+
+
+
+# key generation notes
+#export GNUPGHOME="$(mktemp -d)"
+#gpg --batch --passphrase '' --quick-gen-key foo@bar.tld rsa sign,encrypt never
+#gpg --armor --export foo@bar.tld > publickey.gpg # put in repo, is signign key probably
+#gpg --armor --export-secret-key foo@bar.tld > privatekey.gpg
+#rm -rf "$GNUPGHOME"
+export GNUPGHOME="$(mktemp -d)"
+trap 'rm -rf -- "$GNUPGHOME"' EXIT
+keyid=$(gpg --list-packets < "$privateKey" | awk '$1=="keyid:"{print$2}')
+gpg --batch --import "$privateKey"
+
+
+
 # Release, Release.gpg & InRelease
 apt-ftparchive release . > Release
-echo "TODO: sign stuff again"
-#gpg --default-key "$keyname" -abs -o - Release > Release.gpg
-#gpg --default-key "$keyname" --clearsign -o - Release > InRelease
+gpg --default-key "$keyid" -abs -o - Release > Release.gpg
+gpg --default-key "$keyid" --clearsign -o - Release > InRelease
 
 if [ "$dry" = true ]; then
     exit 0
@@ -83,10 +98,9 @@ to setup this apt repo:
 \`\`\`
 curl -fsSL https://raw.githubusercontent.com/$(gh repo view --json nameWithOwner -q .nameWithOwner)/refs/heads/main/KEY.gpg | sudo gpg --dearmor -o /usr/share/keyrings/$repoKeyName.gpg
 cat | sudo tee /etc/apt/sources.list.d/bs-manager.sources << EOF
-Architectures: amd64
-Suites: latest/
+Suites: /
 Types: deb
-Uris: https://github.com/$(gh repo view --json nameWithOwner -q .nameWithOwner)/releases/download/
+Uris: https://github.com/$(gh repo view --json nameWithOwner -q .nameWithOwner)/releases/download/latest
 Signed-By: /usr/share/keyrings/$repoKeyName.gpg
 EOF
 \`\`\`
