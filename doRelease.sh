@@ -96,7 +96,7 @@ git tag -f "$tag" -m \
 
 to setup this apt repo:
 \`\`\`
-curl -fsSL https://raw.githubusercontent.com/$(gh repo view --json nameWithOwner -q .nameWithOwner)/refs/heads/main/KEY.gpg | sudo gpg --dearmor -o /usr/share/keyrings/$repoKeyName.gpg
+curl -fsSL https://raw.githubusercontent.com/$(gh repo view --json nameWithOwner -q .nameWithOwner)/refs/heads/main/$repoKeyName.gpg | sudo gpg --dearmor -o /usr/share/keyrings/$repoKeyName.gpg
 cat | sudo tee /etc/apt/sources.list.d/bs-manager.sources << EOF
 Suites: /
 Types: deb
