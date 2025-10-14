@@ -51,13 +51,12 @@ if [[ -z "$keyname" ]]; then
     h "need to pass in gpg signing key name"
 fi
 
-echo "TODO do clean releases"
-#rm -rf release
-#mkdir release
+rm -rf release
+mkdir release
 cd release
 
 # download all the debs in newFileList
-#< "$debList" xargs -n1 -P5 -- wcurl --curl-options="--create-dirs --silent"
+< "$debList" xargs -n1 -P5 -- wcurl --curl-options="--create-dirs --silent"
 
 # Packages & Packages.gz
 dpkg-scanpackages --multiversion . > Packages
@@ -75,26 +74,34 @@ fi
 
 tag=latest
 release=latest
+repoKeyName=bs-manager
 
-git tag -f "$tag" -F- <<EOF
-tag thing I dunno
+git tag -f "$tag" -m \
+"bs-manager apt repo
 
-to use this apt repo:
-curl -fsSL https://raw.githubusercontent.com/silentrald/bs-manager-deb/refs/heads/main/KEY.gpg | sudo gpg --dearmor -o /usr/share/keyrings/bs-manager.gpg
-curl -fsSL https://raw.githubusercontent.com/silentrald/bs-manager-deb/refs/heads/main/bs-manager.sources | sudo tee /etc/apt/sources.list.d/bs-manager.sources
+to setup this apt repo:
+\`\`\`
+curl -fsSL https://raw.githubusercontent.com/$(gh repo view --json nameWithOwner -q .nameWithOwner)/refs/heads/main/KEY.gpg | sudo gpg --dearmor -o /usr/share/keyrings/$repoKeyName.gpg
+cat | sudo tee /etc/apt/sources.list.d/bs-manager.sources << EOF
+Architectures: amd64
+Suites: latest/
+Types: deb
+Uris: https://github.com/$(gh repo view --json nameWithOwner -q .nameWithOwner)/releases/download/
+Signed-By: /usr/share/keyrings/$repoKeyName.gpg
+EOF
+\`\`\`
 
-TODO: probably put list of debs in here? it's the release notes
 
 Date: $(date --iso=s)
-SHA: $(git rev-parse --short HEAD)
-EOF
+SHA: $(git rev-parse --short HEAD)"
 
-git push origin --force "$tag"
+echo "pushing new tag $tag"
+git push origin --quiet --force "$tag"
 
 
-# delete everything out of the release
+echo "delete everything out of the release $release"
 gh release view "$release" --json assets --jq '.assets[] | .name' | xargs --no-run-if-empty -n1 gh release delete-asset "$release"
-# update the release to point to the updated tag
+echo "update the release to point to the updated tag"
 gh release edit "$release" -n "$(git tag -l --format='%(body)' "$tag")" -t "$(git tag -l --format='%(subject)' "$tag")"
-# upload new assets
+echo "upload new assets"
 gh release upload "$release" ./*
