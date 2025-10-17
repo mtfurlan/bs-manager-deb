@@ -25,17 +25,8 @@ sudo apt remove bs-manager
 
 ## Repo Automation Notes
 
-1. github workflow cronjob check if `debsIncludedInThisRepo` has correct debs compared with whatever upstream is (webhooks won't work unless we have control over the source repo, and a daily cronjob seems fine?)
-2. if pr needed, download debs into `repo`, generate debian repo there, commit everything but the debs, make PR
-3. if the PR looks good, do gpg stuff to make Release.gpg and InRelease, commit to PR
+1. github workflow cronjob check if repo has most recent releases from upstream(`ghapt scan --check`)
+2. if more recent debs are released, update repo (`ghapt-scan`) and generate debian repo (`ghapt repoize`), commit everything but the debs, make PR
+3. if the PR looks good, do gpg stuff $(`ghapt sign`), commit to PR
 4. approve PR, merge
-5. github actions on push to main, do release by downloading debs and trusting that `repo` and `debsIncludedInThisRepo` are in sync (maybe do an error check?), and update the release tag
-
-
-scripts needed
-1. check if debsIncludedInThisRepo is up to date
-2. download debs
-3. create non-gpg release stuff for debs
-4. create PR
-5. manual sign gpg
-6. update release
+5. github actions on push to main, do release (`ghapt publish`)

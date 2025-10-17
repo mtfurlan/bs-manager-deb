@@ -1,9 +1,8 @@
 #!/bin/bash
 set -euo pipefail
-cd "$(dirname "${BASH_SOURCE[0]}")"
+. "${DIR:-$(pwd)}/ghapt-common"
 
-debList=$(realpath "debsIncludedInThisRepo")
-upstreamRepo=Zagrios/bs-manager
+sourceRepos=("Zagrios/bs-manager")
 
 # shellcheck disable=SC2120
 h () {
@@ -12,22 +11,15 @@ h () {
 
   cat <<EOF
 Usage: $(basename "${BASH_SOURCE[0]}") [OPTION]...
-  update $debList with debs this repo is publishing and push a commit
+  update the deb list with debs this repo is publishing and push a commit
 Available options:
   -h, --help       display this help and exit
-  -n, --check      don't modify or push anything, just check if an update is required
+  -n, --check      don't modify or push anything, just check if an update is required, exit code 2 if updated needed
 EOF
 
     # if args, exit 1 else exit 0
     [ $# == 0 ] || exit 1
     exit 0
-}
-
-die() {
-    local msg=$1
-    local code=${2-1} # default exit status 1
-    echo "$msg"
-    exit "$code"
 }
 
 # getopt short options go together, long options have commas
@@ -49,32 +41,31 @@ while true ; do
 done
 
 # list of updsream debs to deal with, newline separated
-generateFileList () {
+listDebs () {
     repo=${1:?Must Provide Repo to generateFileList}
-    releaseCount=${2:-2}
+    releaseCount=${2:-1}
     gh release list -R "$repo" --exclude-drafts --exclude-pre-releases --limit "$releaseCount" --json tagName --jq '.[] | .tagName' | xargs -I{} gh release view '{}' -R "$repo" --json assets --jq '.assets[] | .url' | grep ".deb$"
 }
 
 
 newFiles=$(mktemp -t tmp.debGitRepoThing.XXXXXXXXXX,)
-trap 'rm -- "$newFiles"' EXIT
+trap 'rm -f -- "$newFiles"' EXIT
 
-generateFileList "$upstreamRepo" 1 | sort > "$newFiles"
+for repo in "${sourceRepos[@]}"; do
+    listDebs "$repo" 1 >> "$newFiles"
+done
+
+sort -o "$newFiles" "$newFiles"
 
 if cmp -s "$debList" "$newFiles" ; then
-    echo "upstream unchagned from current, not doing anything"
     exit 0
+fi
+
+if [ "$check" = true ]; then
+    exit 2
 fi
 
 echo "deb list updated:"
-cat "$debList"
-echo new
-cat "$newFiles"
-diff "$debList" "$newFiles"
+diff --new-file "$debList" "$newFiles" || true
 
-
-if [ "$check" = true ]; then
-    exit 0
-fi
-
-cp "$newFiles" "$debList"
+mv "$newFiles" "$debList"

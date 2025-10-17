@@ -1,0 +1,13 @@
+#!/bin/bash
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+die() {
+    local msg=$1
+    local code=${2-1} # default exit status 1
+    echo "$msg"
+    exit "$code"
+}
+
+debList=$(realpath "$DIR/ghapt-debURLs")
+repoDir=$(realpath "$DIR/repo")
+export debList repoDir DIR

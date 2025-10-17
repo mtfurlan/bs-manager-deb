@@ -1,8 +1,6 @@
 #!/bin/bash
 set -euo pipefail
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
-
-repoDir=$(realpath "$DIR/repo")
+. "${DIR:-$(pwd)}/ghapt-common"
 
 # shellcheck disable=SC2120
 h () {
@@ -15,18 +13,12 @@ TODO
 Available options:
   -h, --help       display this help and exit
   -n, --dry-run    don't update release, only print and mess with the local tmp release dir
+TODO dry
 EOF
 
     # if args, exit 1 else exit 0
     [ $# == 0 ] || exit 1
     exit 0
-}
-
-die() {
-    local msg=$1
-    local code=${2-1} # default exit status 1
-    echo "$msg"
-    exit "$code"
 }
 
 # getopt short options go together, long options have commas
@@ -37,11 +29,9 @@ if [ $? != 0 ] ; then
 fi
 eval set -- "$TEMP"
 
-dry=false
 while true ; do
     case "$1" in
         -h|--help) h ;;
-        -n|--dry-run) dry=true; shift ;;
         --) shift ; break ;;
         *) die "issue parsing args, unexpected argument '$0'!" ;;
     esac
@@ -72,6 +62,7 @@ SHA: $(git rev-parse --short HEAD)"
 echo "pushing new tag $tag"
 git push origin --quiet --force "$tag"
 
+bash "$DIR/ghapt-download"
 
 echo "delete everything out of the release $release"
 gh release view "$release" --json assets --jq '.assets[] | .name' | xargs --no-run-if-empty -n1 gh release delete-asset "$release"

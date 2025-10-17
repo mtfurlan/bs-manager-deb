@@ -1,0 +1,39 @@
+#!/bin/bash
+set -euo pipefail
+. ghapt-common
+
+# shellcheck disable=SC2120
+h () {
+    # if arguments, print them
+    [ $# == 0 ] || echo "$*"
+
+  cat <<EOF
+Usage: $(basename "${BASH_SOURCE[0]}") <SUBCOMMAND>
+  ghapt is for managing apt repos in github releases
+
+the subcommands are
+* scan: decide what debs are going to be included in the repo and write them to ghapt-debURLs
+* repoize: download the debs and make the unsigned repo files(Packages, Relese) in repo/
+* sign: create signed repo files(InRelese, Relese.gpg)
+* publish: download the debs again and update the github release
+
+Available options:
+  -h, --help                    display this help and exit
+EOF
+
+    # if args, exit 1 else exit 0
+    [ $# == 0 ] || exit 1
+    exit 0
+}
+
+subcommand=${1:--h}
+if [[ "$subcommand" == "-h" ]] || [[ "$subcommand" == "--help" ]]; then
+    h
+fi
+shift
+subcommands=(scan repoize sign publish)
+if [[ ! " ${subcommands[*]} " =~ [[:space:]]${subcommand}[[:space:]] ]]; then
+    h "subcommand '$subcommand' not valid"
+fi
+
+bash "$DIR/ghapt-$subcommand" "$@"

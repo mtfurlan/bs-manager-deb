@@ -1,0 +1,66 @@
+#!/bin/bash
+set -euo pipefail
+. "${DIR:-$(pwd)}/ghapt-common"
+
+# shellcheck disable=SC2120
+h () {
+    # if arguments, print them
+    [ $# == 0 ] || echo "$*"
+
+  cat <<EOF
+Usage: $(basename "${BASH_SOURCE[0]}") [OPTION]...
+       $(basename "${BASH_SOURCE[0]}") --create
+       $(basename "${BASH_SOURCE[0]}") --sign <--key-id=SIGNING_KEY_NAME | --key-file=key.gpg>
+  do operations with debian repo in the dir repo
+Available options:
+  -h, --help            display this help and exit
+      --key-id=KEY_ID   sign the repo with KEY_ID already in gpg
+      --file=KEY.gpg    sign the repo with a file non in GPG
+EOF
+
+    # if args, exit 1 else exit 0
+    [ $# == 0 ] || exit 1
+    exit 0
+}
+
+# getopt short options go together, long options have commas
+TEMP=$(getopt -o hsc --long help,create,sign,key-id:,file: -n "$0" -- "$@")
+#shellcheck disable=SC2181
+if [ $? != 0 ] ; then
+    die "something wrong with getopt"
+fi
+eval set -- "$TEMP"
+
+keyid=
+keyFile=
+while true ; do
+    case "$1" in
+        -h|--help) h ;;
+        --key-id) keyid=$2; shift 2 ;;
+        --file) keyFile=$2; shift 2 ;;
+        --) shift ; break ;;
+        *) die "issue parsing args, unexpected argument '$0'!" ;;
+    esac
+done
+
+
+if  [[ -z "$keyid" ]] && [[ -z "$keyFile" ]]; then
+    h "need to pass in signing key file or id"
+fi
+
+if  [[ -n "$keyFile" ]]; then
+    # key generation notes
+    #export GNUPGHOME="$(mktemp -d)"
+    #gpg --batch --passphrase '' --quick-gen-key foo@bar.tld rsa sign,encrypt never
+    #gpg --armor --export foo@bar.tld > publickey.gpg
+    #gpg --armor --export-secret-key foo@bar.tld > privatekey.gpg
+    #rm -rf "$GNUPGHOME"
+    GNUPGHOME="$(mktemp -d)"
+    export GNUPGHOME
+    trap 'rm -rf -- "$GNUPGHOME"' EXIT
+    keyid=$(gpg --quiet --list-packets < "$keyFile" | awk '$1=="keyid:"{print$2}')
+    gpg --quiet --batch --import "$keyFile"
+fi
+
+gpg --quiet --default-key "$keyid" -abs -o - "$repoDir/Release" > "$repoDir/Release.gpg"
+gpg --quiet --default-key "$keyid" --clearsign -o - "$repoDir/Release" > "$repoDir/InRelease"
