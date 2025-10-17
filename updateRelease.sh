@@ -1,8 +1,8 @@
 #!/bin/bash
 set -euo pipefail
-cd "$(dirname "${BASH_SOURCE[0]}")"
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
-debList=$(realpath "debsIncludedInThisRepo")
+repoDir=$(realpath "$DIR/repo")
 
 # shellcheck disable=SC2120
 h () {
@@ -10,8 +10,8 @@ h () {
     [ $# == 0 ] || echo "$*"
 
   cat <<EOF
-Usage: $(basename "${BASH_SOURCE[0]}") [OPTION]... SIGNING-PRIVATE-KEY.gpg
-  do a new release from $debList and push to latest github release
+Usage: $(basename "${BASH_SOURCE[0]}") [OPTION]...
+TODO
 Available options:
   -h, --help       display this help and exit
   -n, --dry-run    don't update release, only print and mess with the local tmp release dir
@@ -46,46 +46,6 @@ while true ; do
         *) die "issue parsing args, unexpected argument '$0'!" ;;
     esac
 done
-privateKey=${1:-}
-if [[ ! -f "$privateKey" ]]; then
-    h "need to pass in gpg signing key name"
-fi
-
-rm -rf release
-mkdir release
-cd release
-
-# download all the debs in newFileList
-< "$debList" xargs -n1 -P5 -- wcurl --curl-options="--create-dirs --silent"
-
-# Packages & Packages.gz
-dpkg-scanpackages --multiversion . > Packages
-gzip -k -f Packages
-
-
-
-
-# key generation notes
-#export GNUPGHOME="$(mktemp -d)"
-#gpg --batch --passphrase '' --quick-gen-key foo@bar.tld rsa sign,encrypt never
-#gpg --armor --export foo@bar.tld > publickey.gpg # put in repo, is signign key probably
-#gpg --armor --export-secret-key foo@bar.tld > privatekey.gpg
-#rm -rf "$GNUPGHOME"
-export GNUPGHOME="$(mktemp -d)"
-trap 'rm -rf -- "$GNUPGHOME"' EXIT
-keyid=$(gpg --list-packets < "$privateKey" | awk '$1=="keyid:"{print$2}')
-gpg --batch --import "$privateKey"
-
-
-
-# Release, Release.gpg & InRelease
-apt-ftparchive release . > Release
-gpg --default-key "$keyid" -abs -o - Release > Release.gpg
-gpg --default-key "$keyid" --clearsign -o - Release > InRelease
-
-if [ "$dry" = true ]; then
-    exit 0
-fi
 
 tag=latest
 release=latest
@@ -118,4 +78,4 @@ gh release view "$release" --json assets --jq '.assets[] | .name' | xargs --no-r
 echo "update the release to point to the updated tag"
 gh release edit "$release" -n "$(git tag -l --format='%(body)' "$tag")" -t "$(git tag -l --format='%(subject)' "$tag")"
 echo "upload new assets"
-gh release upload "$release" ./*
+gh release upload "$release" "$repoDir"/*

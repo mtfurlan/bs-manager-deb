@@ -59,7 +59,7 @@ generateFileList () {
 newFiles=$(mktemp -t tmp.debGitRepoThing.XXXXXXXXXX,)
 trap 'rm -- "$newFiles"' EXIT
 
-generateFileList "$upstreamRepo" "$releaseCount" | sort > "$newFiles"
+generateFileList "$upstreamRepo" 1 | sort > "$newFiles"
 
 if cmp -s "$debList" "$newFiles" ; then
     echo "upstream unchagned from current, not doing anything"
@@ -78,13 +78,3 @@ if [ "$check" = true ]; then
 fi
 
 cp "$newFiles" "$debList"
-echo TODO update readme
-git add README.md "$debList"
-
-git commit -F- <<EOF
-update deb list
-
-run on $(date +"%Y-%m-%d %H:%M:%S %z")
-TODO better message
-EOF
-git push
