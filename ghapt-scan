@@ -2,8 +2,6 @@
 set -euo pipefail
 . "${DIR:-$(pwd)}/ghapt-common"
 
-sourceRepos=("Zagrios/bs-manager")
-
 # shellcheck disable=SC2120
 h () {
     # if arguments, print them
@@ -11,10 +9,10 @@ h () {
 
   cat <<EOF
 Usage: $(basename "${BASH_SOURCE[0]}") [OPTION]...
-  update the deb list with debs this repo is publishing and push a commit
+  update ghapt-debURLs
 Available options:
   -h, --help       display this help and exit
-  -n, --check      don't modify or push anything, just check if an update is required, exit code 2 if updated needed
+  -n, --check      don't modify, just check if an update is required, exit code 2 if updated needed
 EOF
 
     # if args, exit 1 else exit 0
@@ -51,8 +49,10 @@ listDebs () {
 newFiles=$(mktemp -t tmp.debGitRepoThing.XXXXXXXXXX,)
 trap 'rm -f -- "$newFiles"' EXIT
 
-for repo in "${sourceRepos[@]}"; do
-    listDebs "$repo" 1 >> "$newFiles"
+for c in "${upstreamSources[@]}"; do
+    # c is either "repo" or "repo count"
+    # shellcheck disable=SC2086
+    listDebs $c >> "$newFiles"
 done
 
 sort -o "$newFiles" "$newFiles"

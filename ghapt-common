@@ -10,4 +10,6 @@ die() {
 
 debList=$(realpath "$DIR/ghapt-debURLs")
 repoDir=$(realpath "$DIR/repo")
-export debList repoDir DIR
+mapfile -t upstreamSources < "$DIR/ghapt-upstreamConfig"
+
+export debList repoDir DIR upstreamSources

@@ -11,6 +11,8 @@ h () {
 Usage: $(basename "${BASH_SOURCE[0]}") <SUBCOMMAND>
   ghapt is for managing apt repos in github releases
 
+ghapt-upstreamConfig is where upstream repos are configured, one per line, with optional number of latest releases to include separated by a space
+
 the subcommands are
 * scan: decide what debs are going to be included in the repo and write them to ghapt-debURLs
 * repoize: download the debs and make the unsigned repo files(Packages, Relese) in repo/
