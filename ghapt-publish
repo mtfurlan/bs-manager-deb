@@ -9,7 +9,7 @@ h () {
 
   cat <<EOF
 Usage: $(basename "${BASH_SOURCE[0]}") [OPTION]...
-TODO
+TODO publish to a different tag like test or prerelease?
 Available options:
   -h, --help       display this help and exit
   -n, --dry-run    don't update release, only print and mess with the local tmp release dir
