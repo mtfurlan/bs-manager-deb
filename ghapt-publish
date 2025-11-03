@@ -64,9 +64,7 @@ git push origin --quiet --force "$tag"
 
 bash "$DIR/ghapt-download"
 
-echo "delete everything out of the release $release"
-gh release view "$release" --json assets --jq '.assets[] | .name' | xargs --no-run-if-empty -n1 gh release delete-asset "$release"
-echo "update the release to point to the updated tag"
-gh release edit "$release" -n "$(git tag -l --format='%(body)' "$tag")" -t "$(git tag -l --format='%(subject)' "$tag")"
-echo "upload new assets"
-gh release upload "$release" "$repoDir"/*
+echo "delete release $release"
+gh release delete "$release" || true
+echo "create new release to point to the updated tag"
+gh release create "$release" -n "$(git tag -l --format='%(body)' "$tag")" -t "$(git tag -l --format='%(subject)' "$tag")" "$repoDir"/*
