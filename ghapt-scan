@@ -61,6 +61,7 @@ if cmp -s "$debList" "$newFiles" ; then
     exit 0
 fi
 
+
 if [ "$check" = true ]; then
     exit 2
 fi
